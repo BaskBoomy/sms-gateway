@@ -1,5 +1,5 @@
 # Building the binary of the App
-FROM golang:1.25-alpine AS build
+FROM golang:1.26-alpine AS build
 
 ARG APP
 ARG APP_VERSION=1.0.0
@@ -26,7 +26,7 @@ RUN go generate ./...
 
 # Builds the application as a staticly linked one, to allow it to run on alpine
 # RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o app .
-RUN CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags="-w -s -X github.com/android-sms-gateway/server/internal/version.AppVersion=${APP_VERSION} -X github.com/android-sms-gateway/server/internal/version.AppRelease=${APP_RELEASE_ID}" -o app ./cmd/${APP}/main.go
+RUN CGO_ENABLED=0 go build -mod=vendor -a -installsuffix cgo -ldflags="-w -s -X github.com/android-sms-gateway/server/internal/version.AppVersion=${APP_VERSION} -X github.com/android-sms-gateway/server/internal/version.AppRelease=${APP_RELEASE_ID}" -o app ./cmd/${APP}/main.go
 
 # Moving the binary to the 'final Image' to make it smaller
 FROM alpine:3 AS prod
