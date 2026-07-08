@@ -1,6 +1,7 @@
 package messages
 
 import (
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"strconv"
@@ -25,6 +26,19 @@ import (
 const (
 	route3rdPartyGetMessage = "3rdparty.get.message"
 )
+
+const maxAttachmentDecodedBytes = 300 * 1024 // Korean MMS per-part cap
+
+// validateAttachmentSizes rejects attachments whose decoded size exceeds the Korean MMS per-part limit.
+// Count (max 3) and contentType (image/*) are enforced by struct-tag validation upstream.
+func validateAttachmentSizes(atts []smsgateway.Attachment) error {
+	for i, a := range atts {
+		if base64.StdEncoding.DecodedLen(len(a.Data)) > maxAttachmentDecodedBytes {
+			return fmt.Errorf("attachment %d exceeds %d bytes", i, maxAttachmentDecodedBytes)
+		}
+	}
+	return nil
+}
 
 type thirdPartyControllerParams struct {
 	fx.In
@@ -110,6 +124,9 @@ func (h *ThirdPartyController) post(userID string, c *fiber.Ctx) error {
 	var textContent *messages.TextMessageContent
 	var dataContent *messages.DataMessageContent
 	if text := req.GetTextMessage(); text != nil {
+		if err := validateAttachmentSizes(text.Attachments); err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, err.Error())
+		}
 		textContent = &messages.TextMessageContent{
 			Text:        text.Text,
 			Attachments: text.Attachments,
