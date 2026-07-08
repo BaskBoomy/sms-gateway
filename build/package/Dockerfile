@@ -6,23 +6,17 @@ ARG APP_VERSION=1.0.0
 ARG APP_RELEASE_ID=1
 WORKDIR /go/src
 
-# Install swag
+# Install swag (external tool — module mode, before vendor is present)
 RUN go install github.com/swaggo/swag/cmd/swag@latest
 
-# Copy go.mod and go.sum
-COPY go.* ./
-
-# Downloads all the dependencies in advance (could be left out, but it's more clear this way)
-RUN go mod download
-
-# Copy all the Code and stuff to compile everything
+# Copy all the Code and stuff to compile everything (vendor/ included → go auto-uses -mod=vendor)
 COPY . .
 
 # Replace {APP_VERSION} with the actual version
 RUN sed -i "s/{APP_VERSION}/${APP_VERSION}/g" ./cmd/${APP}/main.go
 
-# Generate swagger docs
-RUN go generate ./...
+# Generate swagger docs (vendor mode — no module-mode step to desync vendor/modules.txt)
+RUN go generate -mod=vendor ./...
 
 # Builds the application as a staticly linked one, to allow it to run on alpine
 # RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o app .
