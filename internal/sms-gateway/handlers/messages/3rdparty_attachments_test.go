@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/android-sms-gateway/client-go/smsgateway"
+	"github.com/BaskBoomy/client-go/smsgateway"
 )
 
 func TestValidateAttachmentSizes(t *testing.T) {

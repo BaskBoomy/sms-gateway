@@ -1,7 +1,7 @@
 package converters
 
 import (
-	"github.com/android-sms-gateway/client-go/smsgateway"
+	"github.com/BaskBoomy/client-go/smsgateway"
 	"github.com/android-sms-gateway/server/internal/sms-gateway/modules/messages"
 )
 

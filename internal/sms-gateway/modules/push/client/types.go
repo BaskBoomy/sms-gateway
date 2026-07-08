@@ -3,7 +3,7 @@ package client
 import (
 	"context"
 
-	"github.com/android-sms-gateway/client-go/smsgateway"
+	"github.com/BaskBoomy/client-go/smsgateway"
 )
 
 type Client interface {

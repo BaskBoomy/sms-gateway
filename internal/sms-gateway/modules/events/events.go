@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/android-sms-gateway/client-go/smsgateway"
+	"github.com/BaskBoomy/client-go/smsgateway"
 	"github.com/samber/lo"
 )
 

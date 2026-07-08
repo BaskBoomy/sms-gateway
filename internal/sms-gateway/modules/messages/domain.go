@@ -3,7 +3,7 @@ package messages
 import (
 	"time"
 
-	"github.com/android-sms-gateway/client-go/smsgateway"
+	"github.com/BaskBoomy/client-go/smsgateway"
 )
 
 type TextMessageContent = smsgateway.TextMessage

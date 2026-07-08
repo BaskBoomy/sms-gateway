@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/android-sms-gateway/client-go/smsgateway"
+	"github.com/BaskBoomy/client-go/smsgateway"
 	"github.com/android-sms-gateway/server/internal/sms-gateway/handlers/converters"
 	"github.com/android-sms-gateway/server/internal/sms-gateway/modules/devices"
 	"github.com/go-playground/assert/v2"

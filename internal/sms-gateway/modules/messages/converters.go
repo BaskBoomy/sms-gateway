@@ -5,7 +5,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/android-sms-gateway/client-go/smsgateway"
+	"github.com/BaskBoomy/client-go/smsgateway"
 	"github.com/capcom6/go-helpers/slices"
 )
 

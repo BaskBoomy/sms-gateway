@@ -1,7 +1,7 @@
 package webhooks
 
 import (
-	"github.com/android-sms-gateway/client-go/smsgateway"
+	"github.com/BaskBoomy/client-go/smsgateway"
 )
 
 func webhookToDTO(model *Webhook) smsgateway.Webhook {

@@ -1,26 +1,32 @@
 # Building the binary of the App
-FROM golang:1.26-alpine AS build
+FROM golang:1.25-alpine AS build
 
 ARG APP
 ARG APP_VERSION=1.0.0
 ARG APP_RELEASE_ID=1
 WORKDIR /go/src
 
-# Install swag (external tool — module mode, before vendor is present)
+# Install swag
 RUN go install github.com/swaggo/swag/cmd/swag@latest
 
-# Copy all the Code and stuff to compile everything (vendor/ included → go auto-uses -mod=vendor)
+# Copy go.mod and go.sum
+COPY go.* ./
+
+# Downloads all the dependencies in advance (could be left out, but it's more clear this way)
+RUN go mod download
+
+# Copy all the Code and stuff to compile everything
 COPY . .
 
 # Replace {APP_VERSION} with the actual version
 RUN sed -i "s/{APP_VERSION}/${APP_VERSION}/g" ./cmd/${APP}/main.go
 
-# Generate swagger docs (vendor mode — no module-mode step to desync vendor/modules.txt)
-RUN go generate -mod=vendor ./...
+# Generate swagger docs
+RUN go generate ./...
 
 # Builds the application as a staticly linked one, to allow it to run on alpine
 # RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o app .
-RUN CGO_ENABLED=0 go build -mod=vendor -a -installsuffix cgo -ldflags="-w -s -X github.com/android-sms-gateway/server/internal/version.AppVersion=${APP_VERSION} -X github.com/android-sms-gateway/server/internal/version.AppRelease=${APP_RELEASE_ID}" -o app ./cmd/${APP}/main.go
+RUN CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags="-w -s -X github.com/android-sms-gateway/server/internal/version.AppVersion=${APP_VERSION} -X github.com/android-sms-gateway/server/internal/version.AppRelease=${APP_RELEASE_ID}" -o app ./cmd/${APP}/main.go
 
 # Moving the binary to the 'final Image' to make it smaller
 FROM alpine:3 AS prod

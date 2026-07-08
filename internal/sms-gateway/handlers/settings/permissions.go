@@ -1,6 +1,6 @@
 package settings
 
-import "github.com/android-sms-gateway/client-go/smsgateway"
+import "github.com/BaskBoomy/client-go/smsgateway"
 
 const (
 	ScopeRead  = smsgateway.ScopeSettingsRead

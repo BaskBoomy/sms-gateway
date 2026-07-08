@@ -3,7 +3,7 @@ package settings
 import (
 	"fmt"
 
-	"github.com/android-sms-gateway/client-go/smsgateway"
+	"github.com/BaskBoomy/client-go/smsgateway"
 	"github.com/android-sms-gateway/server/internal/sms-gateway/handlers/base"
 	"github.com/android-sms-gateway/server/internal/sms-gateway/handlers/middlewares/permissions"
 	"github.com/android-sms-gateway/server/internal/sms-gateway/handlers/middlewares/userauth"
