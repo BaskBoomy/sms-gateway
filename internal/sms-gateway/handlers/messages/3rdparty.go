@@ -111,7 +111,8 @@ func (h *ThirdPartyController) post(userID string, c *fiber.Ctx) error {
 	var dataContent *messages.DataMessageContent
 	if text := req.GetTextMessage(); text != nil {
 		textContent = &messages.TextMessageContent{
-			Text: text.Text,
+			Text:        text.Text,
+			Attachments: text.Attachments,
 		}
 	} else if data := req.GetDataMessage(); data != nil {
 		dataContent = &messages.DataMessageContent{

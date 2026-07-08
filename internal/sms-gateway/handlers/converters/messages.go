@@ -13,7 +13,8 @@ func MessageToMobileDTO(m messages.Message) smsgateway.MobileMessage {
 	if m.TextContent != nil {
 		message = m.TextContent.Text
 		textMessage = &smsgateway.TextMessage{
-			Text: m.TextContent.Text,
+			Text:        m.TextContent.Text,
+			Attachments: m.TextContent.Attachments,
 		}
 	} else if m.DataContent != nil {
 		dataMessage = &smsgateway.DataMessage{
